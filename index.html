@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .image-container {
+      position: relative;
+      width: 800px;
+      height: 800px;
+    }
+
+    #image {
+      position: absolute;
+      left: 0; /* 가로 위치 초기값을 0px로 설정 */
+      top: 160px; /* 세로 위치 초기값을 600px로 설정 */
+      width: 100px; /* 이미지 크기 조절 */
+      height: 100px; /* 이미지 크기 조절 */
+    }
+
+    #track {
+      position: absolute;
+      left: 0;
+      top: 250px; /* track 이미지의 세로 위치를 250px로 설정 */
+      width: 930px; /* track 이미지의 가로 크기를 800px로 설정 */
+      height: 50px; /* track 이미지의 세로 크기를 50px로 설정 */
+    }
+
+    #flag {
+      position: absolute;
+      left: 928px;
+      top: 190px; /* track 이미지의 세로 위치를 250px로 설정 */
+      width: 50px; /* track 이미지의 가로 크기를 800px로 설정 */
+      height: 100px; /* track 이미지의 세로 크기를 50px로 설정 */
+    }
+
+    #input-container {
+      margin-top: 30px; /* 숫자 입력 칸 아래로 내리기 */
+      position: relative; /* 상대 위치로 설정 */
+    }
+
+    #greeting {
+      position: absolute; /* 절대 위치로 설정 */
+      top: -40px; /* 숫자 입력 칸 위에 위치 */
+    }
+  
+  </style>
+</head>
+<body>
+  <div id="input-container">
+    <p id="greeting">이 운동선수는 1초마다 목적지까지 남은 거리의 10%를 이동할 수 있어요. 시간을 변화하며 운동선수의 위치를 관찰해볼까요?</p>
+    <label for="inputNumber">Time:</label>
+    <input type="number" id="inputNumber" placeholder="Enter a time">
+    
+    <button onclick="startTimer()">Auto move</button>
+  </div>
+  <div>
+    <p id="displayText"></p>
+  </div>
+  <div class="image-container">
+    <img id="image" src="runner.png" alt="Image">
+    <img id="track" src="track.jpg" alt="Track">
+    <img id="flag" src="flag.jpg" alt="Flag">
+  </div>
+  <script>
+    const image = document.getElementById('image');
+    const track = document.getElementById('track');
+    const flag = document.getElementById('flag');
+    const displayText = document.getElementById('displayText');
+    let inputNumber = 0; // 입력된 시간을 저장할 변수
+    let timerInterval; // 타이머의 간격을 저장할 변수
+
+    function updateImagePosition() {
+      const x = parseFloat(document.getElementById('inputNumber').value);
+      const y = 600;
+
+      if (!isNaN(x)) {
+        const newX = 800 * (1 - Math.pow(0.9, x));
+        image.style.left = newX + 'px';
+        // track 이미지의 가로 위치 업데이트
+      } else {
+        image.style.left = '0px';
+        track.style.left = '0px';
+      }
+    }
+
+    function startTimer() {
+      // 0.1초(100ms)마다 inputNumber를 0.01씩 증가시키는 타이머 시작
+      timerInterval = setInterval(function () {
+        inputNumber += 0.01;
+        document.getElementById('inputNumber').value = inputNumber.toFixed(2); // 입력 필드에 값을 업데이트
+        updateImagePosition(); // 이미지 위치 업데이트
+      }, 10);
+    }
+  </script>
+</body>
+</html>
